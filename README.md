@@ -22,7 +22,12 @@ This teams final project was a nold attempt at solving one of the most potent pr
 
 ## Our Project In A Nut Shell
 
-**Hardware**
+
+
+
+
+
+## Hardware 
 
  ![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/d3f91601-d6c6-426f-b8aa-4733af1c4f2f)
 
@@ -31,7 +36,7 @@ As you can see that one of the main focus was to design a camera mount with an a
 ![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/fec69d6d-94ca-4cc7-9c39-1b82783bdb7e)
 
 
-**The Roboflow Trained Model**
+## The Roboflow Trained Model
 
 
 Using Roboflow we were able to train the model and push it on to our UCSD docker container.
