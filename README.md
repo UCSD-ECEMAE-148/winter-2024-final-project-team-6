@@ -1,4 +1,4 @@
-### Team 6 Final Project Drone Following
+# Team 6 Final Project Drone Following
 
 **Objectives**
 - Use OpenCV to recognize drone
@@ -42,12 +42,13 @@ As you can see that one of the main focus was to design a camera mount with an a
 
 
 Using Roboflow we were able to train the model and push it on to our UCSD docker container.
-importing the roboflow model was one thing, using code to located the centroid and filter our confidence level to an optimal value such that our Oak'd would not mistake any other foriegn object was another hassle. as can be seen in the images below.
+importing the roboflow model was one thing, using code to located the centroid and filter our confidence level to an optimal value such that our Oak'd would not mistake any other foriegn object was another hassle.As can be seen in the images below:
 
-  <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/ff7a4b40-3685-4689-8077-ad3f6151f678" width="400" height="400"></p>
+  <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/3cf85766-3ce2-4085-9c80-a0b58e8be5d9"width="400" height="400"></p>
 
 
-The image below illustrates the optimized version and the code utilized in attaining centriod coordinates with respective error bars.
+
+The image below illustrates the optimized version and the code utilized in attaining centriod coordinates with respective error bars. Now the object with the highest confidence interval is selected for centroid placement and this holds valid for our objective that is to track the drone.
 
             predictions = result["predictions"]
 
@@ -75,19 +76,156 @@ The image below illustrates the optimized version and the code utilized in attai
             self.get_logger().info(f'Error: {self.error}')
 
   
-   <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/70571d1d-74ea-460e-8d60-10b07613816d" width="400" height="400"></p>
+   <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/4158c6bd-3b4d-49e4-834d-327ca3fca48a"width="400" height="400"></p>
+
+
+## Using ROS2 To Configure The Respective Nodes
+
+Once we trained our model the next step was to create a Python Package in ROS2 in the SRC directory to configure our nodes to publish and subrcribe to the displavyed information by the Oak'd camera.
+
+**Our Nodes Can Be Divided into the following Categories:**
+- The Oak'd Camera (drone_detection2.py)
+- The Vesc (vesc_twist_node_custom.py)
+- The PID (pid.py)
+
+**Drone Detection Using Oak'd Node**
+
+For vision testing we imported the following libraries to our node and dfined a class to process the coordinate points for our captured drone images
+        
+    import rclpy
+    from rclpy.node import Node
+    from roboflowoak import RoboflowOak
+    import cv2
+    from cv_bridge import CvBridge
+    import time
+    import numpy as np
+    #from pub_drone_detection2_pkg.msg import CameraError
+    from std_msgs.msg import Int32
+
+     NODE_NAME = "topic_erreurFrame"
+
+     class RoboflowOakNode(Node):
+
+    error = 0
+    prev_error = 0
+    _x = 0
+    _y = 0
+    confidence = 0
+    repeat_counter = 0
+
+    def __init__(self):
+        super().__init__(NODE_NAME)
+
+        # Instantiate an object (rf) with the RoboflowOak module
+        self.rf = RoboflowOak(model="drone-tracking-fztzm", confidence=0.05, overlap=0.5,
+                               version="1", api_key="0RmqstHKjwDcunOH9wus", rgb=True,
+                               depth=True, device=None, blocking=True)
+        
+        self.publisher_ = self.create_publisher(Int32, NODE_NAME, 10)
+
+        self.run()
+
+Once the Oak'd node detects the drone it publishes on a common topic subscribed by the PID node and the Vesc node. This streamlines the detection capability and allows realtime communication and allows for smoother following as opposed to exclusively using Python instead of ROS2.
+
+
+**The PID Node**
+
+After subscribing to drone_detection2.py the car is then able to adjust its steering and maneuverability using the set PID values. For this case we found P = 0.6 I = 0.25 and D = 0.2 as optimal.
+
+    def __init__(self):
+        super().__init__(NODE_NAME) # We are calling the constructor (Initilizes Object state, setting initial values for attributes) of a super class (Node) which passes the "NODE_NAME"           as the arguement 
+        self.twist_publisher = self.create_publisher(Twist, ACTUATOR_TOPIC_NAME, 10)
+        self.twist_cmd = Twist()
+        self.error_subscriber = self.create_subscription(Int32, ERROR_TOPIC_NAME, self.controller, 10)
+
+        # # Default actuator values
+        # self.declare_parameters(
+        #     namespace='',
+        #     parameters=[
+        #         ('Kp_steering', 1),
+        #         ('Ki_steering', 0),
+        #         ('Kd_steering', 0),
+        #         ('error_threshold', 0.15),
+        #         ('zero_throttle',0.0),
+        #         ('max_throttle', 0.2),
+        #         ('min_throttle', 0.1),
+        #         ('max_right_steering', 1.0),
+        #         ('max_left_steering', -1.0)
+        #     ])
+
+        self.Kp = 0.60 # between [0,1]
+        self.Ki = 0.25 # between [0,1]
+        self.Kd = 0.20 # between [0,1]
+        
+        self.zero_throttle = 0 # between [-1,1] but should be around 0
+        self.max_throttle = 0.2 # between [-1,1]
+        self.min_throttle = 0 # between [-1,1]
+        self.max_right_steering = 0.5 # between [-1,1]
+        self.max_left_steering = -0.5 # between [-1,1]
+        self.error_threshold = 0.15
+
+        # initializing PID control
+        self.Ts = float(1/20)
+        self.ek = 0 # current error
+        self.ek_1 = 0 # previous error
+        self.proportional_error = 0 # proportional error term for steering
+        self.derivative_error = 0 # derivative error term for steering
+        self.integral_error = 0 # integral error term for steering
+        self.integral_max = 1E-8
+        
+Similarly the max and min throttle are multiples and hence we set them to slightly lower values for better maneuverabilty and operation at lower rpm.
+
+**The Vesc Node**
+
+Once subscribeed to the PID node the vesc is able to control the motors and steering accordingly and follow the drone using the centrodal cooerinates kept within the frame usind PID values. By default the car will stop once the drone is no longer detected thereby killing the process and restarting the following process when the drone is soghted again. To account for temporary loss of sight the car is programed to drive and steer with a lag before coming to a halt when the drone is no longer sighted.
 
 
 
+    def callback(self, msg):
+        self.get_logger().info(f'vesc: got into callback')
+        # # Steering map from [-1,1] --> [0,1]
+        steering_angle = float(self.steering_offset + self.remap(msg.angular.z))
+        
+        # RPM map from [-1,1] --> [-max_rpm,max_rpm]
+        rpm = int(self.max_rpm * msg.linear.x)
+
+        # self.get_logger().info(f'rpm: {rpm}, steering_angle: {steering_angle}')
+        
+        self.vesc.send_rpm(int(self.throttle_polarity * rpm))
+        self.vesc.send_servo_angle(float(self.steering_polarity * steering_angle))
+
+    def remap(self, value):
+        input_start = -1
+        input_end = 1
+        output_start = 0
+        output_end = 1
+        normalized_output = float(output_start + (value - input_start) * ((output_end - output_start) / (input_end - input_start)))
+        return normalized_output
+    
+    def clamp(self, data, upper_bound, lower_bound=None):
+            if lower_bound==None:
+                lower_bound = -upper_bound # making lower bound symmetric about zero
+            if data < lower_bound:
+                data_c = lower_bound
+            elif data > upper_bound:
+                data_c = upper_bound
+            else:
+                data_c = data
+            return data_c 
+            def main(args=None):
+    rclpy.init(args=args)
+    try:
+        vesc_twist = VescTwist()
+        rclpy.spin(vesc_twist)
+        vesc_twist.destroy_node()
+        rclpy.shutdown()
+    except:
+        vesc_twist.get_logger().info(f'Could not connect to VESC, Shutting down {NODE_NAME}...')
+        vesc_twist.destroy_node()
+        rclpy.shutdown()
+        vesc_twist.get_logger().info(f'{NODE_NAME} shut down successfully.')
 
 
-
-
-
-
-
-
-
-
-
+    if __name__ == '__main__':
+        main()
 
