@@ -20,7 +20,7 @@ upload_url = "".join([
     "&name=YOUR_IMAGE.jpg"
 ])
 
-video = cv2.VideoCapture(0)
+video = cv2.VideoCapture(2)
 
 class JetsonInferenceNode(Node):
 

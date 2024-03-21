@@ -101,7 +101,7 @@ class RoboflowOakNode(Node):
 
             # Display the grayscale frame
             # cv2.imshow("frame", gray_frame)
-            cv2.imshow("frame", frame)
+            #cv2.imshow("frame", frame)
             t = time.time() - t0
             self.get_logger().info(f'FPS: {1/t}')
             

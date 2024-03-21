@@ -6,12 +6,12 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     ld = LaunchDescription()
-    drone_detection_node = Node(
-        package="pub_drone_detection2_pkg",
-        executable="drone_detection2.py",
-        output="screen",
-    )
-    ld.add_action(drone_detection_node)
+#    drone_detection_node = Node(
+#        package="pub_drone_detection2_pkg",
+#        executable="drone_detection2.py",
+#        output="screen",
+#    )
+#    ld.add_action(drone_detection_node)
 
     pid_node = Node(
         package="pub_drone_detection2_pkg",
@@ -33,6 +33,20 @@ def generate_launch_description():
 #        output="screen",
 #    )
 #    ld.add_action(adafruit_servo_node_custom)
+
+    test_steering = Node(
+        package="pub_drone_detection2_pkg",
+        executable="test_steering.py",
+        output="screen",
+    )
+    ld.add_action(test_steering)
+
+    inference_node = Node(
+        package="pub_drone_detection2_pkg",
+        executable="jetson_inference.py",
+        output="screen",
+    )
+    ld.add_action(inference_node)
 
 
     return ld

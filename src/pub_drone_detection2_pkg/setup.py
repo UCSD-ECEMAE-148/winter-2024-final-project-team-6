@@ -23,10 +23,12 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'drone_detection2.py = pub_drone_detection2_pkg.drone_detection2:main',
+#            'drone_detection2.py = pub_drone_detection2_pkg.drone_detection2:main',
             'pid.py = pub_drone_detection2_pkg.pid:main',
             'vesc_twist_node_custom.py = pub_drone_detection2_pkg.vesc_twist_node_custom:main',
             'adafruit_servo_node_custom.py = pub_drone_detection2_pkg.adafruit_twist_node_custom:main',
+            'test_steering.py = pub_drone_detection2_pkg.test_steering:main',
+            'jetson_inference.py = pub_drone_detection2_pkg.jetson_inference:main',
         ],
     },
 )
