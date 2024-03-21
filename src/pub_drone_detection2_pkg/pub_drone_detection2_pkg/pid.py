@@ -33,15 +33,15 @@ class PathPlanner(Node):
         #         ('max_left_steering', -1.0)
         #     ])
 
-        self.Kp = 0.5 # between [0,1]
+        self.Kp = 0.1 # between [0,1]
         self.Ki = 0 # between [0,1]
         self.Kd = 0 # between [0,1]
         
         self.zero_throttle = 0 # between [-1,1] but should be around 0
-        self.max_throttle = 0.5 # between [-1,1]
+        self.max_throttle = 0.2 # between [-1,1]
         self.min_throttle = 0 # between [-1,1]
-        self.max_right_steering = 1 # between [-1,1]
-        self.max_left_steering = -1 # between [-1,1]
+        self.max_right_steering = 0.5 # between [-1,1]
+        self.max_left_steering = -0.5 # between [-1,1]
         self.error_threshold = 0.15
 
         # initializing PID control

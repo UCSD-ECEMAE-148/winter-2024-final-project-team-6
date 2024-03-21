@@ -1,6 +1,6 @@
 import time
 import math
-from pyvesc import VESC_
+from pyvesc import VESC
 #from .vesc_submodule import vesc_client
 
 VESC_NODE_NAME = "vesc_client"
