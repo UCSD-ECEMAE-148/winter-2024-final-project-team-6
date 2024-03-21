@@ -34,6 +34,17 @@ As you can see that one of the main focus was to design a camera mount with an a
 **The Roboflow Trained Model**
 
 
+Using Roboflow we were able to train the model and push it on to our UCSD docker container.
+importing the roboflow model was one thing, using code to located the centroid and filter our confidence level to an optimal value such that our Oak'd would not mistake any other foriegn object was another hassle. as can be seen in the images below.
+
+![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/8955dbb0-0047-488d-ba7d-72345da93aa2)
+
+
+![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/cc2da16f-0574-4fe8-bc5b-c293f9099469)
+
+
+
+
 
 
 
