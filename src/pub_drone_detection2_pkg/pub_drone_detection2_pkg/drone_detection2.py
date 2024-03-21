@@ -101,10 +101,9 @@ class RoboflowOakNode(Node):
 
             # Display the grayscale frame
             # cv2.imshow("frame", gray_frame)
-            # cv2.imshow("frame", frame)
+            cv2.imshow("frame", frame)
             t = time.time() - t0
             self.get_logger().info(f'FPS: {1/t}')
-            # self.get_logger().info(f'PREDICTIONS: {[p.json() for p in predictions]}')
             
 
             # how to close the OAK inference window / stop inference: CTRL+q or CTRL+c
