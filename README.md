@@ -26,6 +26,7 @@ This teams final project was a nold attempt at solving one of the most potent pr
 
  ![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/d3f91601-d6c6-426f-b8aa-4733af1c4f2f)
 
+As you can see that one of the main focus was to design a camera mount with an adjustable angle of attack for us to optimize the cars feild of view and take in account that latencey would result in the drone being lost intermintentley. to account for this we tried to optimize our field of view.
 
 ![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/fec69d6d-94ca-4cc7-9c39-1b82783bdb7e)
 
