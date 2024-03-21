@@ -29,11 +29,13 @@ This teams final project was a nold attempt at solving one of the most potent pr
 
 ## Hardware 
 
- ![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/d3f91601-d6c6-426f-b8aa-4733af1c4f2f)
+  <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/d3f91601-d6c6-426f-b8aa-4733af1c4f2f" width="700" height="400"></p>
+
 
 As you can see that one of the main focus was to design a camera mount with an adjustable angle of attack for us to optimize the cars feild of view and take in account that latencey would result in the drone being lost intermintentley. to account for this we tried to optimize our field of view.
 
-![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/fec69d6d-94ca-4cc7-9c39-1b82783bdb7e)
+  <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/fec69d6d-94ca-4cc7-9c39-1b82783bdb7e" width="700" height="400"></p>
+
 
 
 ## The Roboflow Trained Model
@@ -42,7 +44,8 @@ As you can see that one of the main focus was to design a camera mount with an a
 Using Roboflow we were able to train the model and push it on to our UCSD docker container.
 importing the roboflow model was one thing, using code to located the centroid and filter our confidence level to an optimal value such that our Oak'd would not mistake any other foriegn object was another hassle. as can be seen in the images below.
 
-![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/ff7a4b40-3685-4689-8077-ad3f6151f678)
+  <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/ff7a4b40-3685-4689-8077-ad3f6151f678" width="400" height="400"></p>
+
 
 The image below illustrates the optimized version and the code utilized in attaining centriod coordinates with respective error bars.
 
@@ -71,7 +74,10 @@ The image below illustrates the optimized version and the code utilized in attai
             self.error = self._x - center_x
             self.get_logger().info(f'Error: {self.error}')
 
-![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/70571d1d-74ea-460e-8d60-10b07613816d)
+  
+   <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/70571d1d-74ea-460e-8d60-10b07613816d" width="400" height="400"></p>
+
+
 
 
 
