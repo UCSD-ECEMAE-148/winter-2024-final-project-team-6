@@ -1,4 +1,4 @@
-### Team 6 Final Project Drone Following
+# Team 6 Final Project Drone Following
 
 **Objectives**
 - Use OpenCV to recognize drone
@@ -83,7 +83,7 @@ The image below illustrates the optimized version and the code utilized in attai
 
 Once we trained our model the next step was to create a Python Package in ROS2 in the SRC directory to configure our nodes to publish and subrcribe to the displavyed information by the Oak'd camera.
 
-# Our Nodes Can Be Divided into the following Categories:
+**Our Nodes Can Be Divided into the following Categories:**
 - 
 
 
