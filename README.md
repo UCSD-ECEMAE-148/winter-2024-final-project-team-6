@@ -39,7 +39,36 @@ importing the roboflow model was one thing, using code to located the centroid a
 
 ![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/ff7a4b40-3685-4689-8077-ad3f6151f678)
 
+The image below illustrates the optimized version and the code utilized in attaining centriod coordinates with respective error bars.
+
+            predictions = result["predictions"]
+
+            # log the x y coords of the drone
+            self.prev_highest_confidence = 0
+            for p in predictions:
+                
+                self.confidence = float(p.confidence)
+                if self.confidence > self.prev_highest_confidence:
+                    self.prev_highest_confidence = self.confidence
+                    self._x = int(p.x)
+                    self._y = int(p.y)
+
+                self.get_logger().info(f'x: {self._x}, y: {self._y}, Confidence: {self.confidence}, Highest confidence: {self.prev_highest_confidence}')
+
+            # Get the center coordinates of the frame
+            #if 
+            frame_height, frame_width, num_channels = frame.shape
+            center_x = frame_width // 2
+            center_y = frame_height // 2
+
+
+            ### CALCULATE THE ERROR FOR STEERING ###
+            self.error = self._x - center_x
+            self.get_logger().info(f'Error: {self.error}')
+
 ![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/70571d1d-74ea-460e-8d60-10b07613816d)
+
+
 
 
 
