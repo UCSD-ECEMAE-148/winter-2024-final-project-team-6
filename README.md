@@ -24,5 +24,10 @@ This teams final project was a nold attempt at solving one of the most potent pr
 
 **Hardware**
 
-  ![5821E50F-F221-41D6-B598-5692C9008B30_1_101_o](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/f9aaf5c0-157e-4914-ad99-30f2bfe26445)
+ ![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/d3f91601-d6c6-426f-b8aa-4733af1c4f2f)
+
+
+![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/fec69d6d-94ca-4cc7-9c39-1b82783bdb7e)
+
+
 
