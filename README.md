@@ -42,12 +42,13 @@ As you can see that one of the main focus was to design a camera mount with an a
 
 
 Using Roboflow we were able to train the model and push it on to our UCSD docker container.
-importing the roboflow model was one thing, using code to located the centroid and filter our confidence level to an optimal value such that our Oak'd would not mistake any other foriegn object was another hassle. as can be seen in the images below.
+importing the roboflow model was one thing, using code to located the centroid and filter our confidence level to an optimal value such that our Oak'd would not mistake any other foriegn object was another hassle.As can be seen in the images below:
 
-  <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/ff7a4b40-3685-4689-8077-ad3f6151f678" width="400" height="400"></p>
+  <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/3cf85766-3ce2-4085-9c80-a0b58e8be5d9"width="400" height="400"></p>
 
 
-The image below illustrates the optimized version and the code utilized in attaining centriod coordinates with respective error bars.
+
+The image below illustrates the optimized version and the code utilized in attaining centriod coordinates with respective error bars. Now the object with the highest confidence interval is selected for centroid placement and this holds valid for our objective that is to track the drone.
 
             predictions = result["predictions"]
 
@@ -75,10 +76,15 @@ The image below illustrates the optimized version and the code utilized in attai
             self.get_logger().info(f'Error: {self.error}')
 
   
-   <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/70571d1d-74ea-460e-8d60-10b07613816d" width="400" height="400"></p>
+   <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/4158c6bd-3b4d-49e4-834d-327ca3fca48a"width="400" height="400"></p>
 
 
+## Using ROS2 To Configure The Respective Nodes
 
+Once we trained our model the next step was to create a Python Package in ROS2 in the SRC directory to configure our nodes to publish and subrcribe to the displavyed information by the Oak'd camera.
+
+# Our Nodes Can Be Divided into the following Categories:
+- 
 
 
 
