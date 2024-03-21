@@ -175,7 +175,57 @@ After subscribing to drone_detection2.py the car is then able to adjust its stee
         
 Similarly the max and min throttle are multiples and hence we set them to slightly lower values for better maneuverabilty and operation at lower rpm.
 
+**The Vesc Node**
+
+once subscribeed to the PID node the vesc is able to control the motors and steering accordingly and follow the drone using the centrodal cooerinates kept within the frame usind PID values. By default the car will stop once the drone is no longer detected thereby killing the process and restarting the following process when the drone is soghted again. To account for temporary loss of sight the car is programed to drive and steer with a lag before coming to a halt when the drone is no longer sighted.
 
 
 
+    def callback(self, msg):
+        self.get_logger().info(f'vesc: got into callback')
+        # # Steering map from [-1,1] --> [0,1]
+        steering_angle = float(self.steering_offset + self.remap(msg.angular.z))
+        
+        # RPM map from [-1,1] --> [-max_rpm,max_rpm]
+        rpm = int(self.max_rpm * msg.linear.x)
+
+        # self.get_logger().info(f'rpm: {rpm}, steering_angle: {steering_angle}')
+        
+        self.vesc.send_rpm(int(self.throttle_polarity * rpm))
+        self.vesc.send_servo_angle(float(self.steering_polarity * steering_angle))
+
+    def remap(self, value):
+        input_start = -1
+        input_end = 1
+        output_start = 0
+        output_end = 1
+        normalized_output = float(output_start + (value - input_start) * ((output_end - output_start) / (input_end - input_start)))
+        return normalized_output
+    
+    def clamp(self, data, upper_bound, lower_bound=None):
+            if lower_bound==None:
+                lower_bound = -upper_bound # making lower bound symmetric about zero
+            if data < lower_bound:
+                data_c = lower_bound
+            elif data > upper_bound:
+                data_c = upper_bound
+            else:
+                data_c = data
+            return data_c 
+            def main(args=None):
+    rclpy.init(args=args)
+    try:
+        vesc_twist = VescTwist()
+        rclpy.spin(vesc_twist)
+        vesc_twist.destroy_node()
+        rclpy.shutdown()
+    except:
+        vesc_twist.get_logger().info(f'Could not connect to VESC, Shutting down {NODE_NAME}...')
+        vesc_twist.destroy_node()
+        rclpy.shutdown()
+        vesc_twist.get_logger().info(f'{NODE_NAME} shut down successfully.')
+
+
+    if __name__ == '__main__':
+        main()
 
