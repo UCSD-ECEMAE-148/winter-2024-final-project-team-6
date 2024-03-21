@@ -84,13 +84,95 @@ The image below illustrates the optimized version and the code utilized in attai
 Once we trained our model the next step was to create a Python Package in ROS2 in the SRC directory to configure our nodes to publish and subrcribe to the displavyed information by the Oak'd camera.
 
 **Our Nodes Can Be Divided into the following Categories:**
-- 
+- The Oak'd Camera (drone_detection2.py)
+- The Vesc (vesc_twist_node_custom.py)
+- The PID (pid.py)
+
+**Drone Detection Using Oak'd Node**
+
+For vision testing we imported the following libraries to our node and dfined a class to process the coordinate points for our captured drone images
+        
+    import rclpy
+    from rclpy.node import Node
+    from roboflowoak import RoboflowOak
+    import cv2
+    from cv_bridge import CvBridge
+    import time
+    import numpy as np
+    #from pub_drone_detection2_pkg.msg import CameraError
+    from std_msgs.msg import Int32
+
+     NODE_NAME = "topic_erreurFrame"
+
+     class RoboflowOakNode(Node):
+
+    error = 0
+    prev_error = 0
+    _x = 0
+    _y = 0
+    confidence = 0
+    repeat_counter = 0
+
+    def __init__(self):
+        super().__init__(NODE_NAME)
+
+        # Instantiate an object (rf) with the RoboflowOak module
+        self.rf = RoboflowOak(model="drone-tracking-fztzm", confidence=0.05, overlap=0.5,
+                               version="1", api_key="0RmqstHKjwDcunOH9wus", rgb=True,
+                               depth=True, device=None, blocking=True)
+        
+        self.publisher_ = self.create_publisher(Int32, NODE_NAME, 10)
+
+        self.run()
+
+Once the Oak'd node detects the drone it publishes on a common topic subscribed by the PID node and the Vesc node. This streamlines the detection capability and allows realtime communication and allows for smoother following as opposed to exclusively using Python instead of ROS2.
 
 
+**The PID Node**
 
+After subscribing to drone_detection2.py the car is then able to adjust its steering and maneuverability using the set PID values. For this case we found P = 0.6 I = 0.25 and D = 0.2 as optimal.
 
+    def __init__(self):
+        super().__init__(NODE_NAME) # We are calling the constructor (Initilizes Object state, setting initial values for attributes) of a super class (Node) which passes the "NODE_NAME"           as the arguement 
+        self.twist_publisher = self.create_publisher(Twist, ACTUATOR_TOPIC_NAME, 10)
+        self.twist_cmd = Twist()
+        self.error_subscriber = self.create_subscription(Int32, ERROR_TOPIC_NAME, self.controller, 10)
 
+        # # Default actuator values
+        # self.declare_parameters(
+        #     namespace='',
+        #     parameters=[
+        #         ('Kp_steering', 1),
+        #         ('Ki_steering', 0),
+        #         ('Kd_steering', 0),
+        #         ('error_threshold', 0.15),
+        #         ('zero_throttle',0.0),
+        #         ('max_throttle', 0.2),
+        #         ('min_throttle', 0.1),
+        #         ('max_right_steering', 1.0),
+        #         ('max_left_steering', -1.0)
+        #     ])
 
+        self.Kp = 0.60 # between [0,1]
+        self.Ki = 0.25 # between [0,1]
+        self.Kd = 0.20 # between [0,1]
+        
+        self.zero_throttle = 0 # between [-1,1] but should be around 0
+        self.max_throttle = 0.2 # between [-1,1]
+        self.min_throttle = 0 # between [-1,1]
+        self.max_right_steering = 0.5 # between [-1,1]
+        self.max_left_steering = -0.5 # between [-1,1]
+        self.error_threshold = 0.15
+
+        # initializing PID control
+        self.Ts = float(1/20)
+        self.ek = 0 # current error
+        self.ek_1 = 0 # previous error
+        self.proportional_error = 0 # proportional error term for steering
+        self.derivative_error = 0 # derivative error term for steering
+        self.integral_error = 0 # integral error term for steering
+        self.integral_max = 1E-8
+        
 
 
 
