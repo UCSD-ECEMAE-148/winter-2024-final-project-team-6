@@ -31,4 +31,9 @@ As you can see that one of the main focus was to design a camera mount with an a
 ![image](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/fec69d6d-94ca-4cc7-9c39-1b82783bdb7e)
 
 
+**The Roboflow Trained Model**
+
+
+
+
 
