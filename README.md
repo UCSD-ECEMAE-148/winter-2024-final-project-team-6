@@ -20,5 +20,9 @@ This teams final project was a nold attempt at solving one of the most potent pr
 - add a solid landing base for the drone to land on the car.
   
 
+## Our Project In A Nut Shell
 
-  
+**Hardware**
+
+  ![5821E50F-F221-41D6-B598-5692C9008B30_1_101_o](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/f9aaf5c0-157e-4914-ad99-30f2bfe26445)
+
