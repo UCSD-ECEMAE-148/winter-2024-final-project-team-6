@@ -177,7 +177,7 @@ Similarly the max and min throttle are multiples and hence we set them to slight
 
 **The Vesc Node**
 
-once subscribeed to the PID node the vesc is able to control the motors and steering accordingly and follow the drone using the centrodal cooerinates kept within the frame usind PID values. By default the car will stop once the drone is no longer detected thereby killing the process and restarting the following process when the drone is soghted again. To account for temporary loss of sight the car is programed to drive and steer with a lag before coming to a halt when the drone is no longer sighted.
+Once subscribeed to the PID node the vesc is able to control the motors and steering accordingly and follow the drone using the centrodal cooerinates kept within the frame usind PID values. By default the car will stop once the drone is no longer detected thereby killing the process and restarting the following process when the drone is soghted again. To account for temporary loss of sight the car is programed to drive and steer with a lag before coming to a halt when the drone is no longer sighted.
 
 
 
