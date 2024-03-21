@@ -173,7 +173,7 @@ After subscribing to drone_detection2.py the car is then able to adjust its stee
         self.integral_error = 0 # integral error term for steering
         self.integral_max = 1E-8
         
-
+Similarly the max and min throttle are multiples and hence we set them to slightly lower values for better maneuverabilty and operation at lower rpm.
 
 
 
