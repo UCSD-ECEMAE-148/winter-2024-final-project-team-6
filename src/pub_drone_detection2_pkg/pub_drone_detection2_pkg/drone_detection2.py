@@ -9,6 +9,7 @@ import numpy as np
 from std_msgs.msg import Int32
 
 NODE_NAME = "topic_erreurFrame"
+RESIZE_SCALAR = 2
 
 class RoboflowOakNode(Node):
 
@@ -24,7 +25,7 @@ class RoboflowOakNode(Node):
         super().__init__(NODE_NAME)
 
         # Instantiate an object (rf) with the RoboflowOak module
-        self.rf = RoboflowOak(model="drone-tracking-fztzm", confidence=0.25, overlap=0.5,
+        self.rf = RoboflowOak(model="drone-tracking-fztzm", confidence=0.15, overlap=0.5,
                                version="1", api_key="0RmqstHKjwDcunOH9wus", rgb=True,
                                depth=False, device=None, blocking=True)
         
@@ -42,19 +43,19 @@ class RoboflowOakNode(Node):
 
             # Reduce the resolution of the frame while preserving aspect ratio
             #### FRAME RESIZING ----------------------------------------------
-            max_width = 256
-            max_height = 128
+            # max_width = 256
+            # max_height = 256
             frame_width, frame_height, _ = frame.shape
-            aspect_ratio = frame_width / frame_height
+            # aspect_ratio = frame_width / frame_height
 
-            if aspect_ratio > max_width / max_height:
-                new_width = max_width
-                new_height = int(new_width / aspect_ratio)
-            else:
-                new_height = max_height
-                new_width = int(new_height * aspect_ratio)
+            # if aspect_ratio > max_width / max_height:
+            #     new_width = max_width
+            #     new_height = int(new_width / aspect_ratio)
+            # else:
+            #     new_height = max_height
+            #     new_width = int(new_height * aspect_ratio)
 
-            frame = cv2.resize(frame, (new_width, new_height))
+            frame = cv2.resize(frame, (int(frame_width/RESIZE_SCALAR), int(frame_height/RESIZE_SCALAR)))
 
             #### --------------------------------------------------------------
 
@@ -65,20 +66,23 @@ class RoboflowOakNode(Node):
                 self.confidence = float(p.confidence)
                 if self.confidence > self.prev_highest_confidence:
                     self.prev_highest_confidence = self.confidence
-                    self._x = int(p.x)
-                    self._y = int(p.y)
+                    self._x = int(p.x/RESIZE_SCALAR)
+                    self._y = int(p.y/RESIZE_SCALAR)
 
                 # self.get_logger().info(f'x: {self._x}, y: {self._y}, Confidence: {self.confidence}, Highest confidence: {self.prev_highest_confidence}')
 
             # Get the center coordinates of the frame
-            #if 
             frame_height, frame_width, num_channels = frame.shape
             center_x = frame_width // 2
             center_y = frame_height // 2
 
             ### CALCULATE THE ERROR FOR STEERING ###
-            self.error = self._x - center_x
-            # self.get_logger().info(f'Error: {self.error}')
+            if (len(predictions) == 0):
+                self.error = 0
+            else:
+                self.error = self._x - center_x
+                
+            self.get_logger().info(f'Error: {self.error}, x: {self._x}, y: {self._y}, ')
             
             # stop steering (persisting error) if we lose the drone
             if (self.error == self.prev_error):
@@ -120,10 +124,6 @@ class RoboflowOakNode(Node):
             # find avg dt from times
             avg_dt = sum(self.times) / len(self.times)
             self.get_logger().info(f'Average dt: {avg_dt}')
-
-            self.get_logger().info(f'dt: {t}')
-            self.get_logger().info(f'FPS: {1/t}')
-            
 
             # how to close the OAK inference window / stop inference: CTRL+q or CTRL+c
             if cv2.waitKey(1) == ord('q'):

@@ -33,16 +33,20 @@ class PathPlanner(Node):
         #         ('max_left_steering', -1.0)
         #     ])
 
+        self.throttle_buffer = [5]
+
         self.Kp = 1/300 # between [0,1]
         self.Ki = 0 # between [0,1]
         self.Kd = 0 # between [0,1]
-        
+
         self.zero_throttle = 0.0 # between [-1,1] but should be around 0
         self.max_throttle = 0.2 # between [-1,1]
         self.min_throttle = 0.0 # between [-1,1]
         self.max_right_steering = 1.0 # between [-1,1]
         self.max_left_steering = -1.0 # between [-1,1]
         self.error_threshold = 0.10
+        self.max_rpm = 20000
+        self.min_rpm = 1000
 
         # initializing PID control
         self.Ts = float(1/20)
@@ -52,7 +56,9 @@ class PathPlanner(Node):
         self.derivative_error = 0 # derivative error term for steering
         self.integral_error = 0 # integral error term for steering
         self.integral_max = 1E-8
-        
+
+        self.throttle_avg = 0
+
         self.get_logger().info(
             f'\nKp_steering: {self.Kp}'
             f'\nKi_steering: {self.Ki}'
@@ -71,9 +77,36 @@ class PathPlanner(Node):
         self.ek = self.ek - 120
 
         # Throttle gain scheduling (function of error)
-        self.inf_throttle = self.min_throttle - (self.min_throttle - self.max_throttle) / (1 - self.error_threshold)
-        throttle_float_raw = ((self.min_throttle - self.max_throttle)  / (1 - self.error_threshold)) * abs(self.ek) + self.inf_throttle
-        throttle_float = self.clamp(throttle_float_raw, self.max_throttle, self.min_throttle)
+        # self.inf_throttle = self.min_throttle - (self.min_throttle - self.max_throttle) / (1 - self.error_threshold)
+        # throttle_float_raw = ((self.min_throttle - self.max_throttle)  / (1 - self.error_threshold)) * abs(self.ek) + self.inf_throttle
+        # throttle_float = self.clamp(throttle_float_raw, self.max_throttle, self.min_throttle)
+
+        if self.ek != -120: 
+            throttle_float = min((0.2/300)*abs(self.ek), self.max_throttle)
+        else:
+            throttle_float = 0 
+
+        if (len(self.throttle_buffer) < 5):
+            self.throttle_buffer.append(throttle_float)
+        
+        if (len(self.throttle_buffer) == 5):
+            count = 0
+            for t in self.throttle_buffer:
+                if (t != 0):
+                    # we foudn a nonzero throttle
+                    count+=1
+
+            # take the average
+            self.throttle_avg = sum(self.throttle_buffer) / count if count > 0 else 0
+            self.get_logger().info(f'Throttle: {self.throttle_avg}, count: {count}, sum: {sum(self.throttle_buffer)}')
+
+            # clear the buffer
+            self.throttle_buffer.clear()
+
+    
+        self.zero_rpm = int(self.zero_throttle * self.max_rpm)
+        self.max_rpm = int(self.max_throttle  * self.max_rpm)
+        self.min_rpm = int(self.min_throttle  * self.max_rpm)
 
         # Steering PID terms
         self.proportional_error = self.Kp * self.ek
@@ -88,7 +121,7 @@ class PathPlanner(Node):
         try:
             # publish control signals
             self.twist_cmd.angular.z = float(steering_float)
-            self.twist_cmd.linear.x = float(throttle_float)
+            self.twist_cmd.linear.x = float(self.throttle_avg)
             self.twist_publisher.publish(self.twist_cmd)
 
             # shift current time and error values to previous values
