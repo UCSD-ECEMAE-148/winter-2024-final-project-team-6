@@ -1,11 +1,13 @@
-# Team 6 Final Project Drone Following
+# Team 6 Final Project: Drone Following
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/H7b-YXtxtiM&ab_" title="Robocar Video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope" allowfullscreen></iframe>
 
 **Objectives**
-- Use OpenCV to recognize drone
-- Integrate it into the Jetson and follow the Drone while navigating
+- Use machine learning and OpenCV to recognize drone
+- Integrate it into the Jetson Nano and follow the drone while navigating
 - Reducing latencey for optimized relay times and rapid tracking
 
-### Absratact 
+### Abstract 
 This teams final project was a nold attempt at solving one of the most potent problems faced in the tracking and recovery sector of aerial vehicles namely drones which can be used in delivering courier packages to remote locations. Using line detection in a 2-dimentional setting is already challenging but this project in many was pushed the limit of the Nano and Oakd's processing capability by utilizing Roboflow trained models to succesfully identify the airborne drone.
 
 ## The Minimum Viable Product
@@ -15,16 +17,9 @@ This teams final project was a nold attempt at solving one of the most potent pr
 - Use effective algorithms to ensure that our erroe values allow us to keep the drone in frame while it is moving.
 
 ## What We Could Have Done If Had More Time.
-- Incorporate a second camera to land the drone perfectley on the landing base
+- Incorporate a second camera to land the drone perfectly on the landing base
 - Incorporate obstruction avoidance using Lidar or RGB depth
-- add a solid landing base for the drone to land on the car.
-  
-
-## Our Project In A Nut Shell
-
-
-
-
+- add a solid landing base for the drone to land on the car
 
 
 ## Hardware 
@@ -32,7 +27,7 @@ This teams final project was a nold attempt at solving one of the most potent pr
   <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/d3f91601-d6c6-426f-b8aa-4733af1c4f2f" width="700" height="400"></p>
 
 
-As you can see that one of the main focus was to design a camera mount with an adjustable angle of attack for us to optimize the cars feild of view and take in account that latencey would result in the drone being lost intermintentley. to account for this we tried to optimize our field of view.
+One of the main focus was to design a camera mount with an adjustable angle of attack for us to optimize the cars field of view and take in account that latency would result in the drone being lost intermittently. To account for this we tried to optimize our field of view.
 
   <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/fec69d6d-94ca-4cc7-9c39-1b82783bdb7e" width="700" height="400"></p>
 
@@ -42,7 +37,7 @@ As you can see that one of the main focus was to design a camera mount with an a
 
 
 Using Roboflow we were able to train the model and push it on to our UCSD docker container.
-importing the roboflow model was one thing, using code to located the centroid and filter our confidence level to an optimal value such that our Oak'd would not mistake any other foriegn object was another hassle.As can be seen in the images below:
+importing the roboflow model was one thing, using code to located the centroid and filter our confidence level to an optimal value such that our Oak'd would not mistake any other foriegn object was another hassle. As can be seen in the images below:
 
   <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/3cf85766-3ce2-4085-9c80-a0b58e8be5d9"width="400" height="400"></p>
 
@@ -255,7 +250,7 @@ and to set permissions:
 **Contact**
 - Clement BONOMELLI Clement.BONOMELLI@estaca.eu
 - Ryaan Adil Rashid ryaanadil@outlook.com
-- Ben Garofalo bgarofalo@ucsd.edu
+- Ben Garofalo bgarofalo@ucsd.edu 
 - Jeffery Keppler jkeppler@ucsd.edu
 
 ## Acknowledgments
