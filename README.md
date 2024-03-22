@@ -257,3 +257,7 @@ and to set permissions:
 - Ryaan Adil Rashid ryaanadil@outlook.com
 - Ben Garofalo bgarofalo@ucsd.edu
 - Jeffery Keppler jkeppler@ucsd.edu
+
+## Acknowledgments
+Thank you to UCSD Jacobs School of Engineering, Triton AI, Professor Silberman, Arjun, Alexander, Winston, John (Especially thank you lending us drone), and Daniel for taking the time to support us along the way!
+
