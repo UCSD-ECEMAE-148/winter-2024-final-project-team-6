@@ -226,7 +226,8 @@ and to set permissions:
           Sudo chmod 777 .Xauthority
 
 ## The Schematics
-<p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/9ba73860-3057-4eb6-8fd5-defbab0b0540"width="500" height="400"></p>
+<img width="562" alt="image" src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/68714078/345b6fe9-c39f-4d32-8d54-741b34929343">
+
 
 ## What We Could Have Done If Had More Time.
 - Incorporate a second camera to land the drone perfectly on the landing base
