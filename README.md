@@ -1,26 +1,16 @@
-# Team 6 Final Project: Drone Following
+<h1 align="center">Team 6 Final Project - Drone Following with Computer Vision</h1>
+---
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/H7b-YXtxtiM&ab_" title="Robocar Video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope" allowfullscreen></iframe>
-
-**Objectives**
-- Use machine learning and OpenCV to recognize drone
-- Integrate it into the Jetson Nano and follow the drone while navigating
-- Reducing latencey for optimized relay times and rapid tracking
 [![Video of final project](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/68714078/c1dc3038-7345-4b93-b0b6-4b096942d60a)](http://www.youtube.com/watch?v=H7b-YXtxtiM&ab_)
 
 ### Abstract 
-This teams final project was a nold attempt at solving one of the most potent problems faced in the tracking and recovery sector of aerial vehicles namely drones which can be used in delivering courier packages to remote locations. Using line detection in a 2-dimentional setting is already challenging but this project in many was pushed the limit of the Nano and Oakd's processing capability by utilizing Roboflow trained models to succesfully identify the airborne drone.
+Our team built an autonomous car that could identify, track, and follow a flying drone using machine learning, openCV, and ROS2. 
 
-## The Minimum Viable Product
-- Identify the drone
-- Use ROS2 as a platform to track the drone
-- Integrate a platform that can be used for landing the drone
-- Use effective algorithms to ensure that our erroe values allow us to keep the drone in frame while it is moving.
-
-## What We Could Have Done If Had More Time.
-- Incorporate a second camera to land the drone perfectly on the landing base
-- Incorporate obstruction avoidance using Lidar or RGB depth
-- add a solid landing base for the drone to land on the car
+**Objectives**
+- Use machine learning and OpenCV to recognize drone
+- Use ROS2 running on the Jetson Nano to connect vision and car control
+- Follow the drone as it flies around
+- Arrest motion when drone leaves the frame or moves to land on the moving base
 
 
 ## Hardware 
@@ -77,14 +67,14 @@ The image below illustrates the optimized version and the code utilized in attai
 
 ## Using ROS2 To Configure The Respective Nodes
 
-Once we trained our model the next step was to create a Python Package in ROS2 in the SRC directory to configure our nodes to publish and subrcribe to the displavyed information by the Oak'd camera.
+Once we trained our model the next step was to create a Python Package in ROS2 to configure our nodes to publish and subrcribe to the displayed information by the OAK-D camera.
 
 **Our Nodes Can Be Divided into the following Categories:**
-- The Oak'd Camera (drone_detection2.py)
-- The Vesc (vesc_twist_node_custom.py)
-- The PID (pid.py)
+- The Vision Node (drone_detection2.py)
+- The PID Car Control Node (pid.py)
+- The VESC Node (vesc_twist_node_custom.py)
 
-**Drone Detection Using Oak'd Node**
+**Drone Detection Using OAK-D Vision Node**
 
 For vision testing we imported the following libraries to our node and dfined a class to process the coordinate points for our captured drone images
         
@@ -173,7 +163,7 @@ Similarly the max and min throttle are multiples and hence we set them to slight
 
 **The Vesc Node**
 
-Once subscribeed to the PID node the vesc is able to control the motors and steering accordingly and follow the drone using the centrodal cooerinates kept within the frame usind PID values. By default the car will stop once the drone is no longer detected thereby killing the process and restarting the following process when the drone is soghted again. To account for temporary loss of sight the car is programed to drive and steer with a lag before coming to a halt when the drone is no longer sighted.
+Once subscribeed to the PID node the vesc is able to control the motors and steering accordingly to follow the drone. By default the car will stop once the drone is no longer detected. To account for temporary loss of sight the car is programed to drive and steer with a lag before coming to a halt when the drone is no longer sighted.
 
 
 
@@ -227,7 +217,7 @@ Once subscribeed to the PID node the vesc is able to control the motors and stee
 
 ## Issues With X-11 Forwarding - X Authority
 
-As a result of the jetson crashing multiple times, we faced multiple hinderances with launching our nodes mainly due to X-authority, for which we found a simple fix that is to remove the X-authority files re-install the X server using the following command setting all permissions for .Xauthority file 
+As a result of the jetson crashing multiple times, we faced multiple hinderances with launching our nodes mainly due to X-authority files, for which we found a simple fix that is to remove the X-authority files, re-install the X server using the following command, and set all permissions for .Xauthority file 
 
           sudo apt-get install --reinstall xserver-xorg
 
@@ -238,22 +228,22 @@ and to set permissions:
 ## The Schematics
 <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/9ba73860-3057-4eb6-8fd5-defbab0b0540"width="500" height="400"></p>
 
+## What We Could Have Done If Had More Time.
+- Incorporate a second camera to land the drone perfectly on the landing base
+- Incorporate obstruction avoidance using Lidar or RGB depth
+- add a solid landing base for the drone to land on the car
 
 
-# The Final Project
-
-
-## The Team Behind It All
-
+## The Team
 
 <p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/66c37c50-6c7b-4a25-b513-662b73621d7b"width="500" height="400"></p>
 
 **Contact**
 - Clement BONOMELLI Clement.BONOMELLI@estaca.eu
 - Ryaan Adil Rashid ryaanadil@outlook.com
-- Ben Garofalo bgarofalo@ucsd.edu 
+- Ben Garofalo bgarofalo@ucsd.edu [LinkedIn](https://www.linkedin.com/in/bengarofalo/)
 - Jeffery Keppler jkeppler@ucsd.edu
 
 ## Acknowledgments
-Thank you to UCSD Jacobs School of Engineering, Triton AI, Professor Silberman, Arjun, Alexander, Winston, John (Especially thank you lending us drone), and Daniel for taking the time to support us along the way!
+Thank you to UCSD Jacobs School of Engineering, Triton AI, Professor Jack Silberman, Arjun Naageshwaran, Alexander Haken, Winston Chou, John Liu (especially thank you lending us drone), and Daniel Vega Zepeda for taking the time to support us along the way!
 
