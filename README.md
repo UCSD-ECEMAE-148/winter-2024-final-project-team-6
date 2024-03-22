@@ -229,3 +229,31 @@ Once subscribeed to the PID node the vesc is able to control the motors and stee
     if __name__ == '__main__':
         main()
 
+## Issues With X-11 Forwarding - X Authority
+
+As a result of the jetson crashing multiple times, we faced multiple hinderances with launching our nodes mainly due to X-authority, for which we found a simple fix that is to remove the X-authority files re-install the X server using the following command setting all permissions for .Xauthority file 
+
+          sudo apt-get install --reinstall xserver-xorg
+
+and to set permissions:
+
+          Sudo chmod 777 .Xauthority
+
+## The Schematics
+<p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/9ba73860-3057-4eb6-8fd5-defbab0b0540"width="500" height="400"></p>
+
+
+
+# The Final Project
+
+
+## The Team Behind It All
+
+
+<p align="center"><img src="https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/164306890/66c37c50-6c7b-4a25-b513-662b73621d7b"width="500" height="400"></p>
+
+**Contact**
+- Clement BONOMELLI Clement.BONOMELLI@estaca.eu
+- Ryaan Adil Rashid ryaanadil@outlook.com
+- Ben Garofalo bgarofalo@ucsd.edu
+- Jeffery Keppler jkeppler@ucsd.edu
