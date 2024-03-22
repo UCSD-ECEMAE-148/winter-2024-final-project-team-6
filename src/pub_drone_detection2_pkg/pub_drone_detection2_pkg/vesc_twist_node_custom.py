@@ -69,7 +69,6 @@ class VescTwist(Node):
 
 
     def callback(self, msg):
-        self.get_logger().info(f'vesc: got into callback')
         # # Steering map from [-1,1] --> [0,1]
         steering_angle = float(self.steering_offset + self.remap(msg.angular.z))
         

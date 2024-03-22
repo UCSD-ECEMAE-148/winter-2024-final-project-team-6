@@ -14,5 +14,11 @@ def generate_launch_description():
     )
     ld.add_action(inference_node)
 
+    camera_node = Node(
+        package="pub_drone_detection2_pkg",
+        executable="cam.py",
+        output="screen",
+    )
+    ld.add_action(camera_node)
 
     return ld

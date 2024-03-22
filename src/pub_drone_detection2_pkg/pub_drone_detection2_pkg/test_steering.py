@@ -21,7 +21,7 @@ class TestNode(Node):
             msg.data = self.error
             self.publisher_.publish(msg)
             self.error += increment
-            if self.error == -300 or self.error == 0:
+            if self.error == 300 or self.error == 0:
                 increment *= -1  # Reverse the increment direction
             time.sleep(0.01)  # Delay of 0.5 seconds
 

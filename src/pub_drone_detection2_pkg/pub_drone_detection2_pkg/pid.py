@@ -37,11 +37,11 @@ class PathPlanner(Node):
         self.Ki = 0 # between [0,1]
         self.Kd = 0 # between [0,1]
         
-        self.zero_throttle = 0 # between [-1,1] but should be around 0
+        self.zero_throttle = 0.0 # between [-1,1] but should be around 0
         self.max_throttle = 0.2 # between [-1,1]
-        self.min_throttle = 0 # between [-1,1]
-        self.max_right_steering = 1 # between [-1,1]
-        self.max_left_steering = -1 # between [-1,1]
+        self.min_throttle = 0.0 # between [-1,1]
+        self.max_right_steering = 1.0 # between [-1,1]
+        self.max_left_steering = -1.0 # between [-1,1]
         self.error_threshold = 0.10
 
         # initializing PID control
@@ -65,9 +65,9 @@ class PathPlanner(Node):
         )
 
     def controller(self, data):
-        self.get_logger().info(f'we got into controller function')
         # setting up PID control
         self.ek = data.data
+        # scale to servo offsets
         self.ek = self.ek - 120
 
         # Throttle gain scheduling (function of error)
@@ -77,7 +77,6 @@ class PathPlanner(Node):
 
         # Steering PID terms
         self.proportional_error = self.Kp * self.ek
-        self.get_logger().info(f'proportional_error: {self.proportional_error}')
 
         self.derivative_error = self.Kd * (self.ek - self.ek_1) / self.Ts
         self.integral_error += self.Ki * self.ek * self.Ts

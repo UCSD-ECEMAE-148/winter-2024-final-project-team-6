@@ -5,25 +5,26 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 
 NODE_NAME = "camera_node"
+CAMERA_TOPIC = "camera/img_raw"
 
 class CameraNode(Node):
 
     def __init__(self):
         super().__init__(NODE_NAME)
         # Create a pipeline
-        pipeline = dai.Pipeline()
+        self.pipeline = dai.Pipeline()
 
         # Create a color camera node
-        cam = pipeline.createColorCamera()
-        cam.setPreviewSize(1920, 1080)
-        cam.setInterleaved(False)
+        self.cam = self.pipeline.createColorCamera()
+        self.cam.setPreviewSize(1920, 1080)
+        self.cam.setInterleaved(False)
 
         # Create an XLink output node for the color camera
-        xout = pipeline.createXLinkOut()
-        xout.setStreamName("preview")
-        cam.preview.link(xout.input)
+        self.xout = self.pipeline.createXLinkOut()
+        self.xout.setStreamName("preview")
+        self.cam.preview.link(self.xout.input)
 
-        self.pub = self.create_publisher(Image, "camera", 10)
+        self.pub = self.create_publisher(Image, CAMERA_TOPIC, 10)
         self.run()
 
     def run(self):

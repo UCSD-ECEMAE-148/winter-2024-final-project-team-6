@@ -8,6 +8,7 @@ import numpy as np
 from std_msgs.msg import Int32
 import requests
 import base64
+from sensor_msgs.msg import Image
 
 NODE_NAME = "topic_erreurFrame"
 ROBOFLOW_MODEL = "drone-tracking-fztzm"
@@ -20,7 +21,8 @@ upload_url = "".join([
     "&name=YOUR_IMAGE.jpg"
 ])
 
-video = cv2.VideoCapture(2)
+#video = cv2.VideoCapture(2)
+CAMERA_TOPIC = "camera/img_raw"
 
 class JetsonInferenceNode(Node):
 
@@ -35,14 +37,13 @@ class JetsonInferenceNode(Node):
         super().__init__(NODE_NAME)
         
         self.publisher_ = self.create_publisher(Int32, NODE_NAME, 10)
+        self.sub = self.create_subscription(Image, CAMERA_TOPIC, self.run, 10)
 
-        self.run()
-
-    def run(self):
+    def run(self, data):
         # Running the model and displaying the video output with detections
         while rclpy.ok():
 
-            ret, img = video.read()
+            img = data.data
 
             # Resize (while maintaining the aspect ratio) to improve speed and save bandwidth
             height, width, channels = img.shape
