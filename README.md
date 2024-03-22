@@ -6,6 +6,7 @@
 - Use machine learning and OpenCV to recognize drone
 - Integrate it into the Jetson Nano and follow the drone while navigating
 - Reducing latencey for optimized relay times and rapid tracking
+[![Video of final project](https://github.com/UCSD-ECEMAE-148/winter-2024-final-project-team-6/assets/68714078/c1dc3038-7345-4b93-b0b6-4b096942d60a)](http://www.youtube.com/watch?v=H7b-YXtxtiM&ab_)
 
 ### Abstract 
 This teams final project was a nold attempt at solving one of the most potent problems faced in the tracking and recovery sector of aerial vehicles namely drones which can be used in delivering courier packages to remote locations. Using line detection in a 2-dimentional setting is already challenging but this project in many was pushed the limit of the Nano and Oakd's processing capability by utilizing Roboflow trained models to succesfully identify the airborne drone.
