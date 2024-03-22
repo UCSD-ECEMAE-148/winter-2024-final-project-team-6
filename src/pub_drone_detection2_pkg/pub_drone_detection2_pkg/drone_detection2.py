@@ -25,8 +25,8 @@ class RoboflowOakNode(Node):
         super().__init__(NODE_NAME)
 
         # Instantiate an object (rf) with the RoboflowOak module
-        self.rf = RoboflowOak(model="drone-tracking-fztzm", confidence=0.15, overlap=0.5,
-                               version="1", api_key="0RmqstHKjwDcunOH9wus", rgb=True,
+        self.rf = RoboflowOak(model="drone-detection-2-2fwla", confidence=0.25, overlap=0.5,
+                               version="2", api_key="0RmqstHKjwDcunOH9wus", rgb=True,
                                depth=False, device=None, blocking=True)
         
         self.publisher_ = self.create_publisher(Int32, NODE_NAME, 10)
@@ -77,24 +77,24 @@ class RoboflowOakNode(Node):
             center_y = frame_height // 2
 
             ### CALCULATE THE ERROR FOR STEERING ###
+            self.error = self._x - center_x
+
             if (len(predictions) == 0):
                 self.error = 0
-            else:
-                self.error = self._x - center_x
-                
-            self.get_logger().info(f'Error: {self.error}, x: {self._x}, y: {self._y}, ')
             
-            # stop steering (persisting error) if we lose the drone
-            if (self.error == self.prev_error):
-                self.repeat_counter+=1
-            else:
-                self.repeat_counter = 0
-                self.prev_error = self.error
+            # # stop steering (persisting error) if we lose the drone
+            # if (self.error == self.prev_error):
+            #     self.repeat_counter+=1
+            # else:
+            #     self.repeat_counter = 0
+            #     self.prev_error = self.error
 
-            # 10 repeats in a row
-            if (self.repeat_counter > 9):
-                self.repeat_counter = 0
-                self.error = 0
+            # # 10 repeats in a row
+            # if (self.repeat_counter > 9):
+            #     self.repeat_counter = 0
+            #     self.error = 0
+
+            self.get_logger().info(f'Published Error: {self.error}')
 
             msg = Int32()
             msg.data = self.error

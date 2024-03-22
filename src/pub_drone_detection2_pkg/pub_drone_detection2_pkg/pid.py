@@ -73,18 +73,13 @@ class PathPlanner(Node):
     def controller(self, data):
         # setting up PID control
         self.ek = data.data
-        # scale to servo offsets
-        self.ek = self.ek - 120
 
         # Throttle gain scheduling (function of error)
         # self.inf_throttle = self.min_throttle - (self.min_throttle - self.max_throttle) / (1 - self.error_threshold)
         # throttle_float_raw = ((self.min_throttle - self.max_throttle)  / (1 - self.error_threshold)) * abs(self.ek) + self.inf_throttle
         # throttle_float = self.clamp(throttle_float_raw, self.max_throttle, self.min_throttle)
 
-        if self.ek != -120: 
-            throttle_float = min((0.2/300)*abs(self.ek), self.max_throttle)
-        else:
-            throttle_float = 0 
+        throttle_float = min((1/300)*abs(self.ek), self.max_throttle)
 
         if (len(self.throttle_buffer) < 5):
             self.throttle_buffer.append(throttle_float)
@@ -98,7 +93,7 @@ class PathPlanner(Node):
 
             # take the average
             self.throttle_avg = sum(self.throttle_buffer) / count if count > 0 else 0
-            self.get_logger().info(f'Throttle: {self.throttle_avg}, count: {count}, sum: {sum(self.throttle_buffer)}')
+            self.get_logger().info(f'Throttle: {self.throttle_avg}')
 
             # clear the buffer
             self.throttle_buffer.clear()
@@ -115,7 +110,8 @@ class PathPlanner(Node):
         self.integral_error += self.Ki * self.ek * self.Ts
         self.integral_error = self.clamp(self.integral_error, self.integral_max)
         steering_float_raw = self.proportional_error + self.derivative_error + self.integral_error
-        steering_float = self.clamp(steering_float_raw, self.max_right_steering, self.max_left_steering)
+        steering_float = self.clamp(steering_float_raw-0.3, self.max_right_steering, self.max_left_steering)
+        self.get_logger().info(f'Steering final: {steering_float}')
 
         # Publish values
         try:
